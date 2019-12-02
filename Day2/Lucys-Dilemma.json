@@ -1,0 +1,330 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "Lucys-Dilemma",
+            "location": "uksouth",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        },
+                        "FromNumber": {
+                            "defaultValue": "",
+                            "type": "SecureString"
+                        },
+                        "ToNumber": {
+                            "defaultValue": "",
+                            "type": "SecureString"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Month",
+                                "interval": 12,
+                                "startTime": "2019-12-13T08:00:00Z",
+                                "timeZone": "W. Europe Standard Time"
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Delay": {
+                            "runAfter": {
+                                "Start_the_coffee,_set_out_4_cups": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 25,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_2": {
+                            "runAfter": {
+                                "Pour_two_cups": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 5,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_3": {
+                            "runAfter": {
+                                "Light_the_candles": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 5,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_4": {
+                            "runAfter": {
+                                "Deliver_the_coffee_to_Mom_and_Dad": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 4,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_5": {
+                            "runAfter": {
+                                "Return_to_kitchen,_fill_two_more_cups": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 1,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_6": {
+                            "runAfter": {
+                                "Relight_the_candles": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 5,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Delay_7": {
+                            "runAfter": {
+                                "Deliver_the_coffee_to_Sister_and_Brother": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 4,
+                                    "unit": "Minute"
+                                }
+                            }
+                        },
+                        "Deliver_the_coffee_to_Mom_and_Dad": {
+                            "runAfter": {
+                                "Delay_3": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Deliver the coffee to Mom and Dad",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Deliver_the_coffee_to_Sister_and_Brother": {
+                            "runAfter": {
+                                "Delay_6": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Deliver the coffee to Sister and Brother",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Light_the_candles": {
+                            "runAfter": {
+                                "Delay_2": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Light the candles",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Pour_two_cups": {
+                            "runAfter": {
+                                "Delay": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Pour two cups",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Relight_the_candles": {
+                            "runAfter": {
+                                "Delay_5": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Relight the candles",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Return_to_kitchen,_fill_two_more_cups": {
+                            "runAfter": {
+                                "Delay_4": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Return to kitchen, fill two more cups",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Return_to_kitchen,_take_a_break!": {
+                            "runAfter": {
+                                "Delay_7": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Return to kitchen, take a break!",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        },
+                        "Start_the_coffee,_set_out_4_cups": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": "Start the coffee, set out 4 cups",
+                                    "from": "@parameters('FromNumber')",
+                                    "to": "@parameters('ToNumber')"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twilio']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Messages.json"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "twilio": {
+                                "connectionId": "/subscriptions/<your-subscription>/resourceGroups/25DaysOfServerless/providers/Microsoft.Web/connections/twilio",
+                                "connectionName": "twilio",
+                                "id": "/subscriptions/<your-subscription>/providers/Microsoft.Web/locations/uksouth/managedApis/twilio"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
